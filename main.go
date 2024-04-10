@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -23,8 +22,8 @@ func main() {
 	t1 := time.Now()
 
 	if err != nil {
-		var e *exec.ExitError
-		if !errors.As(err, &e) {
+		// errors.As not needed as the ExitError shouldn't be wrapped
+		if _, ok := err.(*exec.ExitError); !ok {
 			die(1, err)
 		}
 	}
