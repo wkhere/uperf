@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
+	"sync/atomic"
 	"time"
 )
 
@@ -12,6 +14,14 @@ func main() {
 	if len(args) == 0 {
 		os.Exit(0)
 	}
+
+	intr := new(atomic.Bool)
+	sigc := make(chan os.Signal, 1)
+	signal.Notify(sigc, os.Interrupt)
+	go func() {
+		<-sigc
+		intr.Store(true)
+	}()
 
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdin = os.Stdin
@@ -29,12 +39,16 @@ func main() {
 		}
 	}
 
-	printStats(os.Stderr, t1.Sub(t0), cmd.ProcessState)
+	printStats(os.Stderr, t1.Sub(t0), cmd.ProcessState, intr.Load())
 	os.Exit(cmd.ProcessState.ExitCode())
 }
 
-func printStats(w *os.File, wall time.Duration, pst *os.ProcessState) {
-	fmt.Fprint(w, "uperf: ", wall, " total")
+func printStats(w *os.File, wall time.Duration, pst *os.ProcessState, intr bool) {
+	title := "uperf: "
+	if intr {
+		title = "uperf (interrupted): "
+	}
+	fmt.Fprint(w, title, wall, " total")
 	if mem, ok := rusage.stats(pst); ok {
 		fmt.Fprint(w, ", ", mem)
 	}
