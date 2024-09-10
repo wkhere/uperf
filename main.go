@@ -7,6 +7,8 @@ import (
 	"os/signal"
 	"sync/atomic"
 	"time"
+
+	"github.com/wkhere/dtf"
 )
 
 func main() {
@@ -48,7 +50,7 @@ func printStats(w *os.File, wall time.Duration, pst *os.ProcessState, intr bool)
 	if intr {
 		title = "uperf (interrupted): "
 	}
-	fmt.Fprint(w, title, wall, " total")
+	fmt.Fprint(w, title, dtf.Fmt(wall), " total")
 	if stats, ok := rusage.stats(pst); ok {
 		fmt.Fprint(w, ", ", stats)
 	}
