@@ -49,8 +49,8 @@ func printStats(w *os.File, wall time.Duration, pst *os.ProcessState, intr bool)
 		title = "uperf (interrupted): "
 	}
 	fmt.Fprint(w, title, wall, " total")
-	if mem, ok := rusage.stats(pst); ok {
-		fmt.Fprint(w, ", ", mem)
+	if stats, ok := rusage.stats(pst); ok {
+		fmt.Fprint(w, ", ", stats)
 	}
 	fmt.Fprintln(w)
 }
