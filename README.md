@@ -5,9 +5,9 @@ uperf
 for Linux & Darwin.
 
 ```
-% uperf ls
-go.mod  go.sum  LICENSE  main.go  Makefile  NEXT  README.md  rusage_darwin.go  rusage.go  rusage_linux.go
-uperf: 3.316ms total, 3.12ms user, 0s sys, 2948k RSS, 95/0 flt
+% uperf ls *.go
+main.go  rusage_darwin.go  rusage.go  rusage_linux.go
+uperf: 3.252ms total, 0s user, 3.004ms sys, 2948k RSS, 92/0 flt
 ```
 
 
