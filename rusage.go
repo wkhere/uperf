@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/wkhere/dtf"
 )
 
 type rusageStats struct {
@@ -15,7 +17,7 @@ type rusageStats struct {
 func (m rusageStats) String() string {
 	return fmt.Sprintf(
 		"%s user, %s sys, %dk RSS, %d/%d flt",
-		m.user, m.sys,
+		dtf.Fmt(m.user), dtf.Fmt(m.sys),
 		m.maxRss, m.minFlt, m.majFlt,
 	)
 }
