@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"strings"
 	"sync/atomic"
 	"time"
 
@@ -41,14 +42,14 @@ func main() {
 		}
 	}
 
-	printStats(os.Stderr, t1.Sub(t0), cmd.ProcessState, intr.Load())
+	printStats(os.Stderr, strings.Join(args, " "), t1.Sub(t0), cmd.ProcessState, intr.Load())
 	os.Exit(cmd.ProcessState.ExitCode())
 }
 
-func printStats(w *os.File, wall time.Duration, pst *os.ProcessState, intr bool) {
-	title := "uperf: "
+func printStats(w *os.File, cmd string, wall time.Duration, pst *os.ProcessState, intr bool) {
+	title := cmd + ": "
 	if intr {
-		title = "uperf (interrupted): "
+		title = cmd + " (interrupted): "
 	}
 	fmt.Fprint(w, title, dtf.Fmt(wall), " total")
 	if r, ok := rusage.stats(pst); ok {
