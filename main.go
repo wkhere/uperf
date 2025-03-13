@@ -59,5 +59,5 @@ func printStats(w *os.File, wall time.Duration, pst *os.ProcessState, intr bool)
 
 func die(code int, err error) {
 	fmt.Fprintln(os.Stderr, "utime:", err)
-	os.Exit(1)
+	os.Exit(code)
 }
